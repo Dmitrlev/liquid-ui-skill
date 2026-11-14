@@ -1,20 +1,20 @@
-# Layout — раскладка блоков в макете
+# Layout — block placement in the mockup
 
-Общий принцип: макет — мобильная колонка, живущая в centered-потоке; блоки идут строго сверху вниз порядком с входа (скрина/описания). Числа ниже — китовые константы, локальные отклонения — только в `Mockup.css` корня макета.
+General principle: the mockup is a mobile column living in the centered flow; blocks go strictly top to bottom in the order from the input (screenshot/description). The numbers below are kit constants; local deviations only inside the mockup root's `Mockup.css`.
 
-## Предпосылки: фон и скругления
+## Premises: background and rounding
 
-Глобальный фон — `#f5f5f5` (на `html`; в хосте плейграунда это `--color-html`, уже задан в `app.css`). Проверять до сборки макета. Смысл: фон светлый и зафиксированный — только так с него выделяются белые блоки и liquid-элементы; любой другой фон ломает контраст всего кита. Правится только на уровне хоста, никогда внутри `Mockup.css`.
+Global background — `#f5f5f5` (on `html`; in the playground host that is `--color-html`, already set in `app.css`). Check before building. The point: the background is light and fixed — only this way white blocks and liquid elements pop from it; any other background breaks the contrast of the whole kit. It changes only at the host level, never inside `Mockup.css`.
 
-### Скругления
+### Rounding
 
-В глобальные стили, всегда вместе с фоном:
+In global styles, always together with the background:
 
 ```css
 :root {
 	--radius-pull: 9999px;
 	--radius-widget: 22px;
-	/* зеркала для либы: она читает --likvid-* */
+	/* mirrors for the lib: it reads --likvid-* */
 	--likvid-color-main: var(--color-main);
 	--likvid-radius-widget: var(--radius-widget);
 }
@@ -26,25 +26,30 @@
 }
 ```
 
-Смысл: две разные формы, не одна цифра на всё — `pill` (`--radius-pull`: капсула, на кнопках и инпутах) и `widget` (`--radius-widget`: на карточках-виджетах). Одна переменная на обе формы запрещена. Закон: widget — значение по умолчанию для всех обычных поверхностей (карточки, баннеры, бейджи), pill — исключение для кнопок и инпутов. Корпус тулбара — не обычная поверхность, а ряд пилюль: ему полагается pill, форма его содержимого. `shape="widget"` остаётся явным вариантом для одиночной кнопки (у `LiquidButton`), не дефолтом.
+The point: two distinct shapes, not one number for everything — `pill` (`--radius-pull`: capsule, on buttons and inputs) and `widget` (`--radius-widget`: on widget cards). One variable for both shapes is forbidden. The law: widget is the default value for all ordinary surfaces (cards, banners, badges), pill is the exception for buttons and inputs. A toolbar shell is not an ordinary surface but a row of pills: it gets pill — the shape of its content. `shape="widget"` stays an explicit variant for a lone button (on `LiquidButton`), never the default.
 
-`squircle` поддерживается не всеми браузерами, поэтому @supports — обязательная заглушка с фолбэком 22px. Закон: `corner-shape: squircle !important;` пишется **на каждом элементе, где использован widget-радиус** — формулировки «где нужен» нет: айфоновское скругление и есть причина widget-формы, `border-radius: var(--radius-widget)` без этого свойства есть нарушение закона. Раздельные радиусы (`border-*-right-radius: var(--radius-widget)`) и производные от токена (`border-radius: calc(var(--radius-widget) - 8px)`) считаются использованным widget-радиусом. Браузеры без поддержки сами игнорируют строку и получают круглые 22px — это штатный фолбэк, а не исключение из правила. Pill (`--radius-pull`) свойство не получает: у капсулы своя форма.
+`squircle` is not supported by every browser, so the `@supports` stub with the 22px fallback is mandatory. The law: `corner-shape: squircle !important;` is written **on every element that uses the widget radius** — there is no "where needed" wording: the iPhone-style corner is exactly the reason the widget shape exists, and `border-radius: var(--radius-widget)` without this property is a violation of the law. Split radii (`border-*-right-radius: var(--radius-widget)`) and token-derived values (`border-radius: calc(var(--radius-widget) - 8px)`) count as widget-radius usage. Browsers without support ignore the line themselves and get round 22px — that is the regular fallback, not an exception from the rule. Pill (`--radius-pull`) never gets the property: a capsule has its own shape.
 
-## Ширина
-1. Макет растягивается по потоку хоста на всю ширину: `width: 94%`, `max-width: 1400px`, `margin-inline: auto`. Узкую мобильную колонку задаёт viewport, а не макет: тот же корень на 375px даёт ~353px. Прежняя формулировка «колонка по ширине скрина» и потолок 1120px отменены.
-2. Внутренние колонки макета (сайдбар+лента, галерея+покупка, инфо+заказ) распределяют растянутую ширину, а не прячутся за мобильный максимум; на мобильных точка распада сеток — ≤720px.
+## Width
 
-## Порядок блоков
-3. DOM-порядок = порядок на скрине сверху вниз; визуальный порядок менять нельзя, даже для «красивее».
-4. Между одноуровневыми блоками — `gap` фиксированный: 16px (мобилка) / 24px (десктоп). Отступы «на глаз» запрещены.
+1. The mockup stretches with the host flow to full width: `width: 94%`, `max-width: 1400px`, `margin-inline: auto`. The narrow mobile column is set by the viewport, not by the mockup: the same root at 375px yields ~353px. The old wording "column as wide as the screenshot" and the 1120px ceiling are cancelled.
+2. The mockup's inner columns (sidebar+feed, gallery+buy, info+checkout) distribute the stretched width instead of hiding behind the mobile maximum; on mobile the grids' collapse point is ≤720px.
 
-## Сетки
-5. Двухколоночная сетка — `1fr 1fr`, на ≤720px схлопывается в `1fr`. Больше трёх колонок не делать: макет тестирует кит, не сетку.
-6. Ряды пилюль/табов — `flex-wrap: wrap`, `gap: 12px`; перенос на мобилке — норма, не баг.
+## Block order
 
-## Стекло и воздух
-7. Стеклянная карточка — внутренний padding `18px 20px` (виджет) / `0.875rem 1rem` (пилюля из кита). Контент не прижимать к канту.
-8. Отступ «низ карточки < верх» для текстовых заголовков в widget-карточке — правило паддингов кита.
+3. DOM order = order on the screenshot, top to bottom; the visual order must not be rearranged, not even "to look nicer".
+4. Between same-level blocks the `gap` is fixed: 16px (mobile) / 24px (desktop). Spacing "by eye" is forbidden.
 
-## Фиксация
-9. Fixed-элементы (нижний навбар) — только `NavBarBase`; не изобретать второй fixed-слой, он конфликтует с паддингом хоста.
+## Grids
+
+5. Two-column grid — `1fr 1fr`, collapsing to `1fr` at ≤720px. Never more than three columns: the mockup tests the kit, not a grid.
+6. Pill/tab rows — `flex-wrap: wrap`, `gap: 12px`; wrapping on mobile is normal, not a bug.
+
+## Glass and air
+
+7. A glass card — inner padding `18px 20px` (widget) / `0.875rem 1rem` (kit pill). Never press content against the bevel.
+8. The "card bottom < top" padding rule for text headings inside a widget card — the kit's padding rule.
+
+## Fixing
+
+9. Fixed elements (bottom navbar) — `NavBarBase` only; do not invent a second fixed layer, it conflicts with the host's padding.

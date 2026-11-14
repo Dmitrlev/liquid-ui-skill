@@ -1,77 +1,77 @@
-# Правила кита и код-стиль для макетов
+# Kit rules and code style for mockups
 
-## Поверхности: что есть liquid, а что нет
+## Surfaces: what is liquid and what is not
 
-Компоненты с префиксом `Liquid*` (`LiquidButton`, `LiquidContainer`, `LiquidRadio`, `NavBarBase`) — это акценты. Они стоят в смысловых местах — действия, выбор, навигация, ключевые карточки. «Liquid везде» = «liquid нигде»: когда каждая поверхность стеклянная, не выделяется ни одна.
+Components prefixed with `Liquid*` (`LiquidButton`, `LiquidContainer`, `LiquidRadio`, `NavBarBase`) are accents. They stand in meaningful places — actions, selection, navigation, key cards. "Liquid everywhere" means "liquid nowhere": when every surface is glass, none of them stands out.
 
-Иерархия поверхностей, от простого к акценту:
-1. **Текстовые блоки и контент** — plain `background: #fff`, без тени, без стекла, без border. Это дефолт для абзацев и секций с текстом, liquid-элементами они не являются.
-2. **Группировка на фоне** — виджет-карточки (`LiquidContainer.section`) только когда группу надо отделить от белой заливки.
-3. **Действия и выбор** — `LiquidButton`, `LiquidRadio`; точечно, каждый экземпляр с причиной.
+Surface hierarchy, from plain to accent:
+1. **Text blocks and content** — plain `background: #fff`, no shadow, no glass, no border. This is the default for paragraphs and text sections; they are not liquid elements.
+2. **Grouping on the background** — widget cards (`LiquidContainer.section`) only when a group must be separated from the white fill.
+3. **Actions and selection** — `LiquidButton`, `LiquidRadio`; surgically, every instance with a reason.
 
-### Вложенный акцент: liquid в liquid запрещён
+### Nested accent: liquid inside liquid is forbidden
 
-В стеклянный контейнер нельзя ставить `LiquidButton` — ни в glass-, ни в accent-варианте. Стекло — поверхность одного уровня: second layer inside reads as garbage, акцент теряется дважды (это видно глазами: акцентная пилюля внутри стеклянной — мусор). Правило абсолютное, исключений нет.
+You may not put a `LiquidButton` into a glass container — neither the glass nor the accent variant. Glass is a one-level surface: a second layer inside reads as garbage, and the accent is lost twice (you can see it: an accent pill inside a glass shell is junk). The rule is absolute, no exceptions.
 
-Действие внутри glass-контейнера — всегда plain-кнопка: ghost (прозрачная, иконка currentColor) либо solid-акцент (заливка `var(--color-main)`, без стекла). По радиусу такие кнопки ничем не отличаются от любых других кнопок макета: по дефолту pill (`border-radius: var(--radius-pull)`). Серой она будет, пока в либе нет нейтрального варианта — когда появится, вариант берём из либы, а не CSS.
+An action inside a glass container is always a plain button: ghost (transparent, `currentColor` icon) or solid-accent (`var(--color-main)` fill, no glass). Such buttons differ from the mockup's other buttons in no radius way: pill by default (`border-radius: var(--radius-pull)`). It stays gray while the lib has no neutral variant — when one appears, take the variant from the lib, not from CSS.
 
-### Группа иконочных кнопок (тулбар)
+### Icon-button group (toolbar)
 
-Объединяй только кнопки, подобные по смыслу и равные по роли (аккаунт/заказы/избранное) — через `LiquidContainer` (shape="pill"): контейнер — стеклянный корпус-капсула группы, пользователь видит один тулбар, кликаются несколько мест.
+Combine only buttons that are similar in meaning and equal in role (account/orders/favorites) — via `LiquidContainer` (shape="pill"): the container is the group's glass capsule shell, the user sees one toolbar, several spots are clickable.
 
-Первостепенная кнопка со своим смыслом (поиск, корзина, настройки, меню) в общий корпус не идёт: отдельный `LiquidButton` + корпус с остальными — два liquid-элемента на ряд. Первостепенность смотрит в ряд, а не в иконку: та же корзина в ряду четырёх равных счётчиков-действий второстепенна и объединяется наравне с остальными; раздельно её ставят, когда она одна несёт главный смысл ряда. Разделение и есть акцент: отдельная кнопка не обязана быть акцентного цвета, ей достаточно стекла. Корпус из одной кнопки не собирают — одинокая кнопка — это `LiquidButton`, не контейнер.
+A first-class button with its own meaning (search, cart, settings, menu) does not join the shared shell: a separate `LiquidButton` plus a shell for the rest — two liquid elements per row. Primacy is judged by the row, not by the icon: the same cart among four equal counter-actions is secondary and groups alongside them; it is split out only when it alone carries the row's main meaning. The split itself is the accent: the separated button need not be accent-colored, glass suffices. A one-button shell is never built — a lonely button is a `LiquidButton`, not a container.
 
-Раздельные кнопки одного ряда — всё равно один кластер: стоят рядом с маленьким шагом (gap 8–12px), не разъезжаются по краям шапки. К краю кластер прижимают средствами раскладки (неликвидный wrapper или `margin-left: auto`), а не вторым стеклянным корпусом.
+Separate buttons of one row are still one cluster: they sit close with a small step (gap 8–12px), not scattered to the edges of the header. The cluster is pinned to the edge by layout means (a non-liquid wrapper or `margin-left: auto`), not by a second glass shell.
 
-Внутри корпуса — `LiquidButton` запрещены (правило вложенного акцента): настоящие кнопки тулбара — plain `<button>`: ghost для обычных, solid-акцент для главной (submit). Акцент тулбара — заливка `var(--color-main)`, не стекло.
+Inside the shell, `LiquidButton`s are forbidden (the nested-accent rule): real toolbar buttons are plain `<button>` — ghost for regular ones, solid-accent for the main one (submit). The toolbar's accent is a `var(--color-main)` fill, not glass.
 
-Кнопки тулбара — такие же кнопки, как все остальные: по дефолту pill-радиус (`var(--radius-pull)`), закон скруглений из `layout.md` к ним применяется без послаблений. Корпусу тулбара — тоже pill: ряд пилюль оборачиваем в капсулу. Widget-форма на кнопке возможна только когда её задаёт сама кнопка (`shape="widget"`), это явный вариант, не дефолт.
+Toolbar buttons are buttons like all others: pill radius by default (`var(--radius-pull)`), and the corner law from `layout.md` applies to them without concessions. The toolbar shell is pill too: a row of pills is wrapped into a capsule. Widget shape on a button is only possible when the button itself declares it (`shape="widget"`) — an explicit variant, never the default.
 
-Ghost-кнопки тулбара прозрачные: подложка внутри стеклянного/белого корпуса запрещена — это второй слой на одной поверхности. Светлый чип под кнопкой допустим только поверх медиа и градиентов (wishlist-сердечко на фото товара), где иконка иначе тонет.
+Ghost toolbar buttons are transparent: a background inside a glass/white shell is forbidden — a second layer on one surface. A light chip under a button is allowed only above media and gradients (a wishlist heart on a product photo), where the icon would otherwise sink.
 
-### Акцент — из оригинала, сабмит в акцент
+### Accent — from the original, submit in accent
 
-Макет всегда задаёт акцентный цвет: если у оригинала (скрин/описание) он есть — берём его в `--color-main` корня макета, не подменяем дефолтом плейграунда. Рядом в корне — обязательные зеркала для компонентов либы: `--likvid-color-main: var(--color-main)`, а при переопределении `--radius-widget` ещё `--likvid-radius-widget: var(--radius-widget)` — либа читает только имена `--likvid-*`, мост через `:root` на скоуп макета не распространяется. Кнопки сабмита/primary — акцентные (`variant="accent"`): это то, куда падает глаз в первую очередь.
+The mockup always declares an accent color: if the original (screenshot/description) has one — take it into the mockup root's `--color-main`, do not substitute the playground's default. Right next to it in the root sit the mandatory mirrors for library components: `--likvid-color-main: var(--color-main)`, and when overriding `--radius-widget` also `--likvid-radius-widget: var(--radius-widget)` — the lib reads only `--likvid-*` names, and the bridge at `:root` does not reach into the mockup's scope. Submit/primary buttons are accent (`variant="accent"`): that is where the eye lands first.
 
-Правило рабочее, не железное: по скринам будем уточнять, какие ещё элементы тянут акцент.
+This rule is working, not iron: from screenshots we will clarify which other elements pull the accent.
 
-### На белом liquid не ставим
+### No liquid on white
 
-Белая regular-поверхность — это база контента, не сцена для акцента: liquid-элемент (glass или accent-стекло), поставленный на белый, теряет и стекло, и акцент — он читается как инородное пятно. Liquid живёт на подкрашенном фоне (глобальном `#f5f5f5`). Поэтому шапка/панель, куда попадает liquid-кнопка или стеклянный тулбар, — без собственной белой подложки; если поверхность белая — кнопки в ней обычные.
+A white regular surface is the content base, not a stage for an accent: a liquid element (glass or accent glass) placed on white loses both the glass and the accent — it reads as a foreign stain. Liquid lives on the tinted background (global `#f5f5f5`). So the header/panel hosting a liquid button or a glass toolbar must have no white background of its own; if the surface is white — buttons in it are plain.
 
-Конкретные случаи «где liquid не нужен» будут дополнять этот раздел.
+Concrete "no liquid here" cases will keep extending this section.
 
-## Компоненты из `likvid-ui`
+## Components from `likvid-ui`
 
 ```ts
 import { LiquidButton, LiquidContainer, LiquidRadio, NavBarBase,
          type I_liquidRadioItem } from 'likvid-ui'
 ```
 
-- `LiquidButton` — пилюля/виджет: `shape="pill"|"widget"`, `variant="glass"|"accent"|"accent-dark"`, `isActive`, `disabled`, `isLoading`, `width="100%"`, `callback`. Полиморфен: `as="a"|"div"|...` (для `as="a"` обязателен `href`). Иконка+подпись — через `children`, не `title`.
-- `LiquidContainer` — стеклянная поверхность с точечным тегом: `LiquidContainer.div`, `.section`, `.button`, `.label`, `.li`, `.a`. Пропсы: `shape`, `className`.
-- `LiquidRadio` — сегмент-контрол: `items: readonly I_liquidRadioItem[]` (`{ value, label, href }`), `value`, `onChange`.
-- `NavBarBase` — нижний fixed-навбар: `tabs: I_mobileNavTab[]` (`{ title, path, icon, isActive, onPress? }`). В макете — только если это нижняя навигация; в потоке страницы не использовать.
+- `LiquidButton` — pill/widget: `shape="pill"|"widget"`, `variant="glass"|"accent"|"accent-dark"`, `isActive`, `disabled`, `isLoading`, `width="100%"`, `callback`. Polymorphic: `as="a"|"div"|...` (`href` is required for `as="a"`). Icon+label go through `children`, not `title`.
+- `LiquidContainer` — glass surface with a dot-tag: `LiquidContainer.div`, `.section`, `.button`, `.label`, `.li`, `.a`. Props: `shape`, `className`.
+- `LiquidRadio` — segment control: `items: readonly I_liquidRadioItem[]` (`{ value, label, href }`), `value`, `onChange`.
+- `NavBarBase` — bottom fixed navbar: `tabs: I_mobileNavTab[]` (`{ title, path, icon, isActive, onPress? }`). In a mockup only if it is bottom navigation; never in the page flow.
 
-## Китовые CSS-правила (полный контракт — `/workspace/.zcode/skills/likvid-glaz/references/`)
+## Kit CSS rules (full contract — `/workspace/.zcode/skills/likvid-glaz/references/`)
 
-- Фон `#f5f5f5` зафиксирован, тёмный режим не отменяет.
-- Стекло — без `border`: `rgba(250,250,250,0.75)` + `backdrop-filter: blur(2px)` + `::before` с внутренним белым кантом (`inset 1px 1px 1px 0 white, inset -1px -1px 1px 0 white`) + мягкая тень `0 0 20px -5px #5353531f`.
-- Прессы: `transition: 0.1s ease-in-out`, `:active { transform: scale(1.02–1.1) }`.
-- Скругления: `--radius-pull: 9999px` (pill), `--radius-widget` (виджет, squircle с `@supports`-заглушкой) — на каждом месте widget-радиуса обязателен `corner-shape: squircle !important;` (закон `layout.md`); финал сборки: счёт деклараций равен числу мест использования, расхождение = макет не готов.
-- Отступы страницы: `--site-horizontal-padding` / `-mobile` — хостовые; bleed-инсеты либы читают `--likvid-padding-inline-mobile` (фолбэк 1rem), значение задаёт проект.
-- Базу токенов либы подключает один раз: `@import 'likvid-ui/theme.css'` в глобальных стилях — `@layer` лежит ниже любых невнеслоевых стилей хоста, порядок подключения не важен. Переопределение токенов — отдельный файл стилей ниже theme, не правка theme и не инлайн в компонентах.
+- Background `#f5f5f5` is fixed and dark mode does not cancel it.
+- Glass carries no `border`: `rgba(250,250,250,0.75)` + `backdrop-filter: blur(2px)` + `::before` with the inner white bevel (`inset 1px 1px 1px 0 white, inset -1px -1px 1px 0 white`) + soft shadow `0 0 20px -5px #5353531f`.
+- Presses: `transition: 0.1s ease-in-out`, `:active { transform: scale(1.02–1.1) }`.
+- Radii: `--radius-pull: 9999px` (pill), `--radius-widget` (widget, squircle with an `@supports` stub) — every widget-radius site requires `corner-shape: squircle !important;` (the law from `layout.md`); end of build: the count of declarations equals the count of usage sites, a mismatch means the mockup is not done.
+- Page paddings: `--site-horizontal-padding` / `-mobile` are host-side; the lib's bleed insets read `--likvid-padding-inline-mobile` (fallback 1rem), the project sets the value.
+- Kit styles wiring: the lib's token base is imported once — `@import 'likvid-ui/theme.css'` in global styles; its `@layer` sits below any unlayered host styles, so import order does not matter. Token overrides live in a separate stylesheet below the theme import — not edits to theme.css, not inline in components.
 
-## React-стиль (из скилла `code-style`)
+## React style (from the `code-style` skill)
 
-- Только функциональные компоненты; `interface` для props; именованный экспорт; `memo` на корневом `Mockup`.
-- `useCallback` — колбэки, уходящие в мемоизированных детей (`LiquidButton` мемоизирован!): инлайн-стрелки в `callback` ломают его `memo`. Паттерн для списков: `Map` стабильных колбэков в `useMemo`.
-- `key` — стабильный id, не индекс.
-- `any`/`as unknown as` запрещены; `JSX.Element` для иконок нормален.
-- Иконки: `() => JSX.Element` со `stroke="currentColor"` — цвет наследуется от кнопки.
+- Functional components only; `interface` for props; named exports; `memo` on the root `Mockup`.
+- `useCallback` — for callbacks that flow into memoized children (`LiquidButton` is memoized!): inline arrows in `callback` break its `memo`. List pattern: a `Map` of stable callbacks in `useMemo`.
+- `key` — a stable id, never an index.
+- `any`/`as unknown as` are forbidden; `JSX.Element` for icons is fine.
+- Icons: `() => JSX.Element` with `stroke="currentColor"` — the color inherits from the button.
 
-## Адаптив
+## Responsive
 
-- Двухколоночные сетки — `grid-template-columns: 1fr 1fr` + `@media (max-width: 720px) { 1fr }`.
-- Ряды пилюль — `flex-wrap: wrap`.
-- Шапка и панели не должны разъезжаться на 320px.
+- Two-column grids — `grid-template-columns: 1fr 1fr` + `@media (max-width: 720px) { 1fr }`.
+- Pill rows — `flex-wrap: wrap`.
+- Headers and panels must not fall apart at 320px.

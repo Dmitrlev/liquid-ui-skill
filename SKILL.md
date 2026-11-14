@@ -1,39 +1,39 @@
 ---
 name: liquid-ui-skill
-description: "Использовать, когда просят сделать «ликвид глаз» (liquid glass): собрать макет, компонент или страницу в этом стиле из компонентов либы likvid-ui."
+description: "Use when asked to build «ликвид глаз» (liquid glass): a mockup, component or page in this style from the likvid-ui component kit."
 ---
 
-# liquid-ui-skill — дизайн-макеты по правилам
+# liquid-ui-skill — mockups by the rules
 
-Задача скилла — создавать UI-дизайн: на входе скриншот или описание, на выходе — дизайн-макет, собранный по правилам и полностью заменяющий предыдущий. Сами правила (кит, хост, раскладка) — в `references/`; здесь только workflow и границы.
+The skill's job is UI design: input is a screenshot or a description, output is a design mockup built by the rules and fully replacing the previous one. The rules themselves (kit, host, layout) live in `references/`; here is only the workflow and the boundaries.
 
 ## Workflow
 
-1. **Intake.** Разбери вход: скриншот/описание. Выпиши блоки сверху вниз (шапка, навигация, контент, футер), стиль, акцентный цвет, интерактив. Если по скрину что-то двусмысленно — решай в пользу «живого» прототипа: табы и кнопки переключаются, счётчики работают.
-2. **Прочитай `references/protocol.md`** — где лежат файлы, как устроена замена до корня, как не сломать проводку.
-3. **Прочитай `references/kit-rules.md`** — китовые правила и стиль кода для макета.
-4. **Прочитай `references/layout.md`, `references/sizes.md` и `references/anatomy.md`** — раскладка, промеры и паттерны: что liquid, что regular.
-5. **Собери макет.** Сначала напиши `Mockup.css` (весь стиль именуй с новым префиксом), затем `icons.tsx`, затем `Mockup.tsx`. Пиши по файлу за раз, не переписывая уже готовый.
+1. **Intake.** Parse the input: screenshot/description. List the blocks top to bottom (header, navigation, content, footer), the style, the accent color, the interactivity. If the screenshot leaves anything ambiguous — decide in favor of a "live" prototype: tabs and buttons switch, counters work.
+2. **Read `references/protocol.md`** — where the files live, how replace-to-the-root works, how not to break the wiring.
+3. **Read `references/kit-rules.md`** — kit rules and code style for the mockup.
+4. **Read `references/layout.md`, `references/sizes.md` and `references/anatomy.md`** — layout, metrics and patterns: what is liquid, what is regular.
+5. **Build the mockup.** Write `Mockup.css` first (name all styles with a fresh prefix), then `icons.tsx`, then `Mockup.tsx`. Write one file at a time, never rewriting a finished one.
 
-## Железные правила
+## Iron rules
 
-1. Один макет за раз: перед сборкой старое содержимое `src/mockups/` удаляется, нового соседнего файла не появляется.
-2. Компоненты — только из `likvid-ui` (в dev он резолвится в `src` либы, переустановка не нужна).
-3. Акцент макета — локальный override `--color-main` в корне макета, а не правка глобальных токенов плейграунда. Рядом в корне всегда зеркало `--likvid-color-main: var(--color-main)`: либа потребляет только имена `--likvid-*`.
-4. Макет адаптивен: двухколоночная сетка схлопывается в одну на ≤720px.
-5. CSS-классы макета — с уникальным префиксом (у старого был `gt-`), чтобы не пересекаться с демо-секциями.
-6. Перед началом работы в entry хоста обязан быть `import 'likvid-ui/theme.css'` — токены и фон `html` идут оттуда; переопределения — отдельным файлом, подключённым ниже theme.css (он в `@layer`, невнеслоевые стили его всегда бьют).
-7. Где использован widget-радиус — там стоит `corner-shape: squircle !important;` без исключений. Финал сборки: счёт `corner-shape` == счёт мест widget-радиуса, расхождение = макет не готов.
+1. One mockup at a time: before building, the old contents of `src/mockups/` are deleted, no neighboring new file appears.
+2. Components — only from `likvid-ui` (in dev it resolves to the lib's `src`, reinstalling is not needed).
+3. The mockup's accent is a local `--color-main` override at the mockup root, not an edit of the playground's global tokens. Right next to it in the root there is always the mirror `--likvid-color-main: var(--color-main)`: the lib consumes only `--likvid-*` names.
+4. The mockup is responsive: the two-column grid collapses to one at ≤720px.
+5. Mockup CSS classes carry a unique prefix (the old one had `gt-`) so they never cross demo sections.
+6. Before starting work, the host entry must contain `import 'likvid-ui/theme.css'` — tokens and the `html` background come from there; overrides go in a separate stylesheet imported below theme.css (it sits in an `@layer`, unlayered styles always beat it).
+7. Wherever the widget radius is used, `corner-shape: squircle !important;` stands there without exceptions. End of build: the count of `corner-shape` declarations equals the count of widget-radius sites; a mismatch means the mockup is not done.
 
-## Структура
+## Structure
 
 ```
 .
 ├── SKILL.md
 └── references/
-    ├── protocol.md   — где файлы, как менять, как не сломать TestSection
-    ├── kit-rules.md  — кит + react-стиль для макетов
-    ├── layout.md     — раскладка блоков: фон, ширина, порядок, сетки
-    ├── sizes.md      — промеры: типографика, размеры управления
-    └── anatomy.md    — паттерны экранов: liquid/regular
+    ├── protocol.md   — where files live, how to replace, how not to break TestSection
+    ├── kit-rules.md  — the kit + react style for mockups
+    ├── layout.md     — block layout: background, widths, order, grids
+    ├── sizes.md      — metrics: typography, control sizes
+    └── anatomy.md    — screen patterns: liquid vs regular
 ```

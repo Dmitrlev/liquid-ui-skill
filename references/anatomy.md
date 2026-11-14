@@ -1,30 +1,39 @@
-# Anatomy — паттерны: где liquid, где regular
+# Anatomy — patterns: where liquid, where regular
 
-Паттерны расположения блоков, снятые с мобильных экранов (iOS). Текст и наполнение на скринах — шум, важна структура. Главный принцип: контент — обычная поверхность, liquid — только точки взаимодействия, 2–3 стеклянных акцента на экран максимум.
+Block-placement patterns taken from mobile screens (iOS). Text and content on the screenshots are noise; the structure is what matters. The main principle: content is an ordinary surface, liquid marks interaction points only — 2–3 glass accents per screen at most.
 
-## 1. Шапка экрана — regular
-Крупный заголовок слева (под ним подстрока), справа — круглая кнопка-иконка или аватар. Поверхности нет: блок живёт на фоне. Круглые кнопки шапки — лёгкий liquid/ghost, это действие, не контент.
+## 1. Screen header — regular
 
-## 2. Фичер-карточка — regular
-Широкая карточка на всю колонку вверху контента: метрика/графика, в углу круглое действие. Обычная сплошная поверхность (белая/тёмная). Liquid — только если карточка одна и она ключевой акцент экрана.
+Large heading on the left (a subline beneath it), a round icon button or an avatar on the right. No surface: the block lives on the background. The header's round buttons are light liquid/ghost — they are actions, not content.
 
-## 3. Метрик-сетка 2×N — regular
-Ряды одинаковых квадратных карточек: заголовок и круглой chevron-кнопкой сверху, крупное значение, мини-графика внизу. Chevrons — ghost-кружки (обводка, без стекла).
+## 2. Feature card — regular
 
-## 4. Вертикальный список карточек — regular
-Повторяющиеся полноширинные карточки-строки: иконка, контент, справа действие; ниже — ряд пилюль-подкнопок. Один шаг gap между карточками.
+A wide card across the column at the top of the content: metric/graphic, a round action in the corner. An ordinary solid surface (white/dark). Liquid only if the card is the single one and the screen's key accent.
 
-## 5. Группированный списочный блок — regular
-Группа строк внутри одной карточки (настройки, меню): слева цветная иконка-чип, строки разделены hairline-линиями, справа — значение/chevron/переключатель.
+## 3. Metric grid 2×N — regular
 
-## 6. Горизонтальный скролл карточек — regular
-Ряд карточек уходит за правый край с наполовину видимой следующей — видимая половина = аффорданс скролла.
+Rows of identical square cards: a heading and a round chevron button at top, a large value, a mini graphic at the bottom. Chevrons are ghost circles (outline, no glass).
 
-## 7. Плавающий таб-бар снизу — LIQUID
-Стеклянная пилюля над контентом, 2–4 таба: иконка+подпись, активный — акцент и собственнаяpill-подложка внутри. В либе — `NavBarBase`. Один из немногих настоящих liquid-элементов экрана.
+## 4. Vertical card list — regular
 
-## 8. Плавающее поле поиска — LIQUID
-Стеклянная пилюля/поле, парящее над фоном.
+Repeating full-width row cards: icon, content, an action on the right; below — a row of pill sub-buttons. One gap step between cards.
 
-## 9. Hero-шапка на фоне — mixed
-Центральный круглый элемент на фото/цветной подложке, поверх — круглые ghost-кнопки; ниже контент продолжается regular-карточками.
+## 5. Grouped list block — regular
+
+A group of rows inside one card (settings, menu): a colored icon-chip on the left, rows separated by hairline dividers, value/chevron/switch on the right.
+
+## 6. Horizontal card scroller — regular
+
+A row of cards runs past the right edge with the next one half-visible — the half-visible card is the scroll affordance.
+
+## 7. Floating tab bar at the bottom — LIQUID
+
+A glass pill above the content, 2–4 tabs: icon + caption, the active one is accented and has its own pill backing inside. In the lib this is `NavBarBase`. One of the few truly liquid elements on the screen.
+
+## 8. Floating search field — LIQUID
+
+A glass pill/field floating over the background.
+
+## 9. Hero header on a background — mixed
+
+A central round element over a photo/colored backing, round ghost buttons above it; below, the content continues with regular cards.
