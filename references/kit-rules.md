@@ -41,11 +41,31 @@ A white regular surface is the content base, not a stage for an accent: a liquid
 
 Concrete "no liquid here" cases will keep extending this section.
 
+## Install and styles (real project)
+
+```bash
+yarn add likvid-ui
+```
+
+Import the base tokens once, in the app entry — the order does not matter, the `@layer likvid.tokens` always sits below your unlayered styles:
+
+```js
+import 'likvid-ui/theme.css'
+```
+
+- **Exports:** `likvid-ui` — `LiquidContainer`, `LiquidButton`, `ButtonLoader`; `likvid-ui/next` — `NavBarBase`, `LiquidRadio` (peer deps `next`, `swiper`); `likvid-ui/theme.css` — kit tokens.
+- **Peer deps:** `react >= 18`, `react-dom >= 18` (plus `next >= 13`, `swiper >= 11` for `/next`).
+- **Token bridge:** components consume only `--likvid-*`; `theme.css` derives them from project variables with fallbacks — `--likvid-radius-widget ← --radius-widget (24px)`, `--likvid-radius-pill ← --radius-pull (9999px)`, `--likvid-color-main ← --color-main (#ff0030)` — and sets `--likvid-color-html: #f5f5f5` + the `html` background.
+- **Overriding tokens** — in a separate stylesheet imported below the theme import (or a non-layered `:root` block), never by editing `theme.css`: an unlayered rule always beats the layer. A mockup's local accent still needs the root mirror `--likvid-color-main: var(--color-main)` because the theme computes at `:root`, not inside the mockup subtree.
+- **Project-provided:** `--likvid-padding-inline-mobile` (bleed insets for `NavBarBase`/`LiquidRadio`; theme does not set it, fallback `1rem`).
+- **Publishing pipeline (maintainers):** `yarn build` = tsc + CSS copy into `dist`; `prepack` runs the build, so `yarn pub` ships fresh `dist`; `files: ["dist"]`. Publishing is the owner's job — an agent builds but never publishes.
+- In the dev playground this install step does not apply: vite aliases `likvid-ui` to the library `src` (iron rule 2), but the import specifiers (`likvid-ui`, `likvid-ui/next`, `likvid-ui/theme.css`) stay identical.
+
 ## Components from `likvid-ui`
 
 ```ts
-import { LiquidButton, LiquidContainer, LiquidRadio, NavBarBase,
-         type I_liquidRadioItem } from 'likvid-ui'
+import { LiquidButton, LiquidContainer } from 'likvid-ui'
+import { NavBarBase, LiquidRadio, type I_liquidRadioItem } from 'likvid-ui/next'
 ```
 
 - `LiquidButton` — pill/widget: `shape="pill"|"widget"`, `variant="glass"|"accent"|"accent-dark"`, `isActive`, `disabled`, `isLoading`, `width="100%"`, `callback`. Polymorphic: `as="a"|"div"|...` (`href` is required for `as="a"`). Icon+label go through `children`, not `title`.
